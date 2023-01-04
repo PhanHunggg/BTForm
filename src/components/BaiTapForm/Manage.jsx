@@ -55,19 +55,25 @@ class Manage extends Component {
     const { name, validity, title, minLength, maxLength } = event.target;
     let message = "";
 
-    const { valueMissing, tooShort, patternMismatch } = validity;
+    const { valueMissing, tooLong, tooShort, patternMismatch } = validity;
 
     if (valueMissing) {
       message = `${title} cần nhập`;
     }
 
-    if (tooShort) {
+    if (tooShort || tooLong) {
       message = `${title} từ ${minLength}-${maxLength} số`;
     }
 
     if (patternMismatch) {
       message = `${title} sai định dạng`;
     }
+    
+    if(patternMismatch && title === "Mã sinh viên"){
+
+      message = `${title} từ 4-10 chữ số`;
+    }
+
 
     this.setState({
       errors: {
@@ -111,9 +117,9 @@ class Manage extends Component {
               <label>Mã sinh viên</label>
               <input
                 value={maSV}
-                pattern="^[0-9]{4,10}$"
                 minLength={4}
                 maxLength={10}
+                pattern="^[0-9]{4,10}$"
                 required
                 title="Mã sinh viên"
                 onBlur={this.handleBlur}
